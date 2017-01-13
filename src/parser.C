@@ -16,7 +16,7 @@ using std::cout;
 using std::endl;
 using std::runtime_error;
 namespace journal_parser {
-int isSeparator(char c){
+int binarynode::isSeparator(char c){
     for (int i=0; i<operationsCount; i++) {
         if ( c == operations[i] ) {
             return 1;
@@ -268,7 +268,7 @@ int binarynode::getType(){
 
 string binarynode::preprocess( string s) {
 
-	cout << "Preprocess In: " << s << endl;
+	// cout << "Preprocess In: " << s << endl;
 	// Get rid of white spaces.
 	// Special treatment for //fileName/( ) syntaxis.
 
@@ -341,7 +341,7 @@ string binarynode::preprocess( string s) {
 			++iChar;
 		}
 	}
-	cout << "Preprocess Out: " << expandFile << endl;
+	// cout << "Preprocess Out: " << expandFile << endl;
     return expandFile;
 }
 
