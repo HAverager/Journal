@@ -1,4 +1,5 @@
-#pragma once
+#ifndef JOURNALHPARSER_
+#define JOURNALHPARSER_
 
 #include <parser.h>
 
@@ -69,3 +70,6 @@ private:
 };
 
 TH1* ApplyModifier(TH1* hist, string Modifier);
+
+
+#endif
