@@ -42,7 +42,7 @@ void Text(Double_t x, Double_t y, Color_t color, char *text, Double_t tsize, dou
 
 	TLatex l;
 	l.SetTextAlign(12);
-	if(tsize>0){
+	if(tsize > 0) {
 		l.SetTextSize(tsize);
 	}
 	l.SetNDC();
@@ -98,7 +98,7 @@ void SetJournalStyle(Int_t font, Double_t tsize) {
 }
 
 TStyle* JournalStyle(Int_t font, Double_t tsize) {
-	TStyle *journalStyle = new TStyle("JOURNAL", "Journal style");
+	TStyle *journalStyle = new TStyle("Journal", "Journal style");
 
 	// use plain black on white colors
 	Int_t icol = 0; // WHITE
