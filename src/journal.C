@@ -196,10 +196,16 @@ void overall(string d, string m, string options) {
 	string mcstr = m;
 	while(mcstr.length() > 3) {
 		counter++;
-		int k = mcstr.find("&&");
-		string sc = journal_parser::expandmc(d, mcstr.substr(0, k));
+		string sc = "";
+		if(mcstr.find("&&")!= string::npos){
+			int k = mcstr.find("&&");
+			sc = journal_parser::expandmc(d, mcstr.substr(0, k));
+			mcstr = mcstr.substr(k + 2, mcstr.length());
+		} else {
+			sc = journal_parser::expandmc(d, mcstr);
+			mcstr = "";
+		}
 		mhv.push_back(hcopy(sc, "mc" + FtoStr(counter)));
-		mcstr = mcstr.substr(k + 2, mcstr.length());
 	}
 
 	// Default options:
@@ -615,6 +621,10 @@ void overall(string d, string m, string options) {
 	if(binanal == "") {
 		can->Print((title + ".eps").c_str());
 	}
+}
+
+void SetJournalStyle(int font, double tsize){
+	journal_utils::SetJournalStyle(font, tsize);
 }
 
 

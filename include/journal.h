@@ -65,5 +65,8 @@ void overall(string d, string m, string options = "scale=0 ratio=0 chi2=1");
 /// Print help of the funtions
 void overall();
 
+/// Set plotting style
+void SetJournalStyle(int font = 43, double tsize = 21);
+
 
 #endif
