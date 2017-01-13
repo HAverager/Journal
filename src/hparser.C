@@ -10,6 +10,9 @@
 #include <TKey.h>
 #include <TRegexp.h>
 #include "TError.h"
+#include "TTree.h"
+#include "TPad.h"
+#include <TCanvas.h>
 
 using std::cout;
 using std::endl;
@@ -256,11 +259,43 @@ TH1* hparser::sValTohVal() {
 				res->SetName("RMS");
 				return res;
 			} else {
-				h = (TH1*) gDirectory->Get(hPath.c_str());
-				if(h == NULL) {
+				TH1* tmp2 = (TH1*) gDirectory->Get(hPath.c_str());
+				if(tmp2 == NULL) {
 					Error("hparser::sValTohVal", "Histogram: %s in file: %s is NOT found",
 							hPath.c_str(), fPath.c_str());
-					return h;
+					return tmp2;
+				} else {
+					if(tmp2->InheritsFrom(TH1::Class())) {
+						h = (TH1*) tmp2->Clone();
+						delete tmp2;
+					} else if(tmp2->InheritsFrom(TTree::Class())) {
+						//Info("hparser::sValTohVal", "Read TTree");
+
+						// Get Parameter of extracted histogramm
+						string options = "";
+						string cuts = "";
+						string hopt = "";
+						getOption(a, ".opt=", options);
+						getOption(a, ".cuts=", cuts);
+						getOption(a, ".h=", hopt);
+						if(hopt != ""){
+							options += ">>htemp"+hopt;
+						}
+
+						TTree *tree = (TTree*) tmp2->Clone();
+						TCanvas* cantmp = new TCanvas("tmp", "tmp", 5, 5);
+						tree->Draw(options.c_str(), cuts.c_str());
+						TH1F* htemp = (TH1F*)gPad->GetPrimitive("htemp");
+						h = (TH1*) htemp->Clone();
+						delete htemp;
+						delete cantmp;
+						delete tmp2;
+						delete tree;
+					} else {
+						Error("hparser::sValTohVal", "Object type %s is not supported", h->ClassName());
+						return h;
+					}
+
 				}
 			}
 		}
@@ -377,8 +412,8 @@ TH1* ApplyModifier(TH1* h, string a) {
 		int zbmin = h->GetZaxis()->FindBin(prominz+0.00001);
 		int zbmax = h->GetZaxis()->FindBin(promaxz-0.00001);
 
-		cout << ybmin << "  " << ybmax << "  " << zbmin << "  " << zbmax << endl;
-		cout << prominy << "  " << promaxy << "  " << prominz << "  " << promaxz  << endl;
+		//cout << ybmin << "  " << ybmax << "  " << zbmin << "  " << zbmax << endl;
+		//cout << prominy << "  " << promaxy << "  " << prominz << "  " << promaxz  << endl;
 
 		if(prominy!=prominy){
 			ybmin = 0;
